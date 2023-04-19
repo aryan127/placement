@@ -10,15 +10,70 @@
     background: white;
     position: relative
 }
+.addmember{
+    width: 500px;
+    height: 200px;
+    border-radius: 0px;
+    box-shadow: 0 0 15px 5px rgb(205, 201, 201);
+    background: white;
+    margin-top:1px ;
+    padding-left: 20px;
+    padding-top: 30px;
+    margin-left: 650px;
+    padding-bottom: 170px;
 
-.admin > .button {
-    background: #1877f2;
-    border: 1px solid #1877f2;
+}
+form > .button{
+    background: #1b58a2;
+    width: 100px;
+    border: 1px solid #1b58a2;
     color: #fff;
-    font-size: 1.25rem;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
+    font-size: 1.25rem;    
     border-radius: 8px;
     outline: none;
     cursor: pointer;
+    margin-top: 10px;
+
+}
+.cardd {
+    font-size: 18px;
+    padding: 0.1em;
+    padding-left: 10px;
+    border: 1px solid #888;
+    width: 400px;
+}
+
+.gridd {
+    max-width: 100px;
+}
+.delete{
+    font-size: 18px;
+    padding: 0.1em;
+    padding-left: 10px;
+    width: 400px;
+    float: left;
+    margin-top: -40px;
+    margin-left: 300px;
+    cursor: pointer;
+}
+.list{
+    width: 700px;
+    height: 600px;
+    border-radius: 0px;
+    box-shadow: 0 0 15px 5px rgb(214, 211, 211);
+    background: white;
+    margin-top: -230px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 30px;
+    margin-left: 210px;
+
+}
+ li:hover {
+     background-color: #585883;
+ }
+.logout{
+    float: left;
+    left: 0;
+    width: 200px;
 }

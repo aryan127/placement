@@ -1,20 +1,22 @@
 
 .login {
-    width: 400px;
-    background: #fff;
+    width: 450px;
+    background:#151c2e;
     border: 1px solid #dddfe2;
     box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
     border-radius: 8px;
     padding: 1rem;
     align-items: center;
     text-align: center;
+    color:  #d0d6df;
+    height: 380px;
 }
 
 .login > input {
     border-radius: 8px;
     border: 2px solid #dddfe2;
     outline: none;
-    color: #1d2129;
+    color: black;
     margin: 0.5rem 0;
     padding: 0.5rem 0.75rem;
     width: 92%;
@@ -22,8 +24,8 @@
 }
 
 .login > .button {
-    background: #1877f2;
-    border: 1px solid #1877f2;
+    background: #3f67e0;
+    border: 1px solid #4269e2;
     color: #fff;
     font-size: 1.25rem;
     padding: 0.5rem;
