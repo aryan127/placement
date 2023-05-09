@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./Admin.css";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const Admin = ({ setLoginUser }) => {
   const history = useHistory();
   const [page, setPage] = useState(true);
   const [user, setUser] = useState({});
+  const [cookies, _] = useCookies(["access_token"]);
+  const handleLogout = () => {
+    localStorage.clear();
+    history.push("/login");
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({
@@ -20,11 +26,16 @@ const Admin = ({ setLoginUser }) => {
 
     if (email) {
       // alert("posted")
-      axios.post("http://localhost:9002/addmem", user).then((res) => {
-        console.log(res);
-        alert(res.data.message);
-        setMydata(res.data);
-      });
+      axios
+        .post("/addmem", user, {
+          headers: { authorization: cookies.access_token },
+        })
+        .then((res) => {
+          console.log(res);
+          alert(res.data.message);
+          setMydata(res.data);
+          handleupdate();
+        });
     } else {
       alert("Invalid Input    ");
     }
@@ -33,19 +44,28 @@ const Admin = ({ setLoginUser }) => {
   const [mydata, setMydata] = useState([{ email: " " }]);
 
   useEffect(() => {
-    axios.get("http://localhost:9002/getmem").then((res) => {
-      setMydata(res.data);
-      console.log(res.data);
-      history.push("/admin");
-    });
+    handleupdate();
   }, []);
-
+  const handleupdate = () => {
+    axios
+      .get("/getmem", {
+        headers: { authorization: cookies.access_token },
+      })
+      .then((res) => {
+        setMydata(res.data);
+        console.log(res.data);
+        history.push("/admin");
+      });
+  };
   const handleDelete = (email) => {
     axios
-      .delete(`http://localhost:9002/memornot/delete/${email}`)
+      .delete(`/memornot/delete/${email}`, {
+        headers: { authorization: cookies.access_token },
+      })
       .then((res) => {
         console.log(res.data);
         setMydata(res.data);
+        handleupdate();
       })
       .catch((error) => {
         console.log(error);
@@ -85,7 +105,7 @@ const Admin = ({ setLoginUser }) => {
                 Add
               </li>
               <div className="list">
-                <h1>List Of Members : </h1>
+                <h1>List Of Members </h1>
                 <div className="gridd">
                   {Array.from(mydata).map((post) => {
                     const { email } = post;
@@ -96,7 +116,20 @@ const Admin = ({ setLoginUser }) => {
                           className="delete"
                           onClick={() => handleDelete(email)}
                         >
-                          DEL
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="30"
+                            height="30"
+                            fill="currentColor"
+                            class="bi bi-person-dash-fill"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M11 7.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"
+                            />
+                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                          </svg>
                         </div>
                       </div>
                     );
@@ -152,7 +185,17 @@ const Admin = ({ setLoginUser }) => {
             </>
           )}
           <li>
-            <div className="logout" onClick={() => history.push("/login")}>
+            <div className="logout" onClick={handleLogout}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-door-closed-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+              </svg>
               Logout
             </div>
           </li>

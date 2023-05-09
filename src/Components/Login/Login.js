@@ -3,8 +3,10 @@ import axios from "axios";
 import "./Login.css";
 import { useHistory } from "react-router-dom";
 import StudentDashboard from "../Student/StudentDashboard";
-import { setCookies } from "react-cookie";
+
+import { useCookies } from "react-cookie";
 const Login = ({ setLoginUser }) => {
+  const [_, setCookies] = useCookies(["access_token"]);
   const history = useHistory();
   const [user, setUser] = useState({
     email: "",
@@ -25,9 +27,11 @@ const Login = ({ setLoginUser }) => {
   };
 
   const login = () => {
-    axios.post("http://localhost:9002/login", user).then((res) => {
+    axios.post("/login", user).then((res) => {
       alert(res.data.message);
+
       console.log(res);
+      setCookies("access_token", res.data.token);
       setLoginUser(res.data.user);
       if (res.data.user.usertype === "admin") {
         history.push("/admin");

@@ -4,10 +4,14 @@ import { useHistory, useLocation } from "react-router-dom";
 import "../Css/Edit.css";
 import StudentDashboard from "../Student/StudentDashboard";
 import Sidebar from "./Sidebar";
+import { useCookies } from "react-cookie";
 
 const Edit = () => {
   const history = useHistory();
   const [user, setUser] = useState({});
+  const [file, setFile] = useState(0);
+  const [pdffile, setPdffile] = useState(0);
+  const [cookies, _] = useCookies(["access_token"]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({
@@ -44,13 +48,33 @@ const Edit = () => {
     ) {
       // alert("posted")
       // console.log(user);
-      axios.put("http://localhost:9002/profile", user).then((res) => {
-        alert(res.data.message);
-        console.log(res, "this is edit");
-      });
+      axios
+        .put("/profile", user, {
+          headers: { authorization: cookies.access_token },
+        })
+        .then((res) => {
+          alert(res.data.message);
+          console.log(res, "this is edit");
+        });
     } else {
       alert("Invalid Input");
     }
+  };
+  const handleFile = (event) => {
+    console.log(event.target.files[0]);
+    setFile(1);
+    var reader = new FileReader();
+    var file = document.getElementById("resume").files[0];
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      console.log("loader");
+      setPdffile(reader.result);
+      setUser({
+        ...user,
+        ["resume"]: reader.result,
+      });
+      console.log(reader.result);
+    };
   };
 
   return (
@@ -179,6 +203,16 @@ const Edit = () => {
                 placeholder="Your Stream"
                 onChange={handleChange}
                 required
+              />
+            </label>
+            <label>
+              Resume:
+              <input
+                type="file"
+                name="resume"
+                id="resume"
+                placeholder="Your Stream"
+                onChange={handleFile}
               />
             </label>
           </div>

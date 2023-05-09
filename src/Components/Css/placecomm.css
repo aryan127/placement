@@ -1,7 +1,7 @@
 
-.form-container {
+.form-containerr {
     width: 600px;
-    height: 750px;
+    height: 890px;
     margin-top: 10px;
     margin: 0 auto;
     padding-left: 30px;
@@ -13,9 +13,9 @@
     background:#151c2e;
     color:  #d0d6df;
   }
-  
   .form-group {
     margin-bottom: 10px;
+    padding-bottom: 1px;
   }
   
   .form-label {
@@ -33,7 +33,7 @@
     font-size: 16px;
   }
   
-  .form-button {
+  .form-button1 {
     padding-top: 20px;
     background-color: #4269e2;
     color: #fff;

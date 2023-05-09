@@ -2,14 +2,24 @@ import React, { useEffect, useState } from "react";
 import "../Css/StudentDashboard.css";
 import { Router, Link, useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
+import imgpath from "../../download.jpg";
+import { Buffer } from "buffer";
+import { useCookies } from "react-cookie";
 
 const StudentDashboard = () => {
   const history = useHistory();
   const [userdata, setData] = useState(null);
   const email = localStorage.getItem("email");
+  const [cookies, _] = useCookies(["access_token"]);
 
+  const handleLogout = () => {
+    localStorage.clear();
+    history.push("/login");
+  };
   axios
-    .get(`http://localhost:9002/login/get-details/${email}`)
+    .get(`/login/get-details/${email}`, {
+      headers: { authorization: cookies.access_token },
+    })
     .then((response) => {
       setData(response.data);
     })
@@ -19,9 +29,12 @@ const StudentDashboard = () => {
 
   const checkplacecomm = () => {
     axios
-      .get(`http://localhost:9002/memornot/get-details/${email}`)
+      .get(`/memornot/get-details/${email}`, {
+        headers: { authorization: cookies.access_token },
+      })
       .then((res) => {
         console.log(res.data.message);
+        console.log(res);
         if (res.data.message === "True") {
           history.push("/placecomm");
         } else {
@@ -29,11 +42,26 @@ const StudentDashboard = () => {
         }
       });
   };
+  const handeldownload = (e) => {
+    var resume = userdata.resume;
+    console.log(resume);
+    const link = Buffer.from(resume).toString();
+    const dlink = document.createElement("a");
+    const file = "resume.pdf";
+    dlink.href = link;
+    dlink.download = file;
+    dlink.click();
+  };
 
   return (
     <>
       <div className="sidebar-content open">
         <ul className="sidebar-menu">
+          <li>
+            <div>
+              <img src={imgpath} alt="" className="image"></img>
+            </div>
+          </li>
           <li>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +123,11 @@ const StudentDashboard = () => {
             </div>
           </li>
           <li>
-            <div onClick={() => history.push("/login")}>
+            <div
+              onClick={() => {
+                handleLogout();
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -112,22 +144,33 @@ const StudentDashboard = () => {
           </li>
         </ul>
       </div>
-      <div className="box">
+      <div>
         {userdata ? (
           <>
-            <h2>Student Information :</h2>
-            <p>Name : {userdata.name}</p>
-            <p>Email : {userdata.email}</p>
-            <p>User Type :{userdata.usertype}</p>
-            <p>First Name : {userdata.firstname}</p>
-            <p>Last Name : {userdata.lastname}</p>
-            <p>Email ID : {userdata.email}</p>
-            <p>Address : {userdata.address}</p>
-            <p>City Name :{userdata.city}</p>
-            <p>Phone No :{userdata.phoneno}</p>
-            <p>College Name : {userdata.college}</p>
-            <p>Stream : {userdata.stream}</p>
-            <p>Skils : {userdata.skill}</p>
+            <div className="box">
+              <h2>My Account</h2>
+              <p>
+                <h3>Name :</h3>
+                {userdata.name}
+              </p>
+              <p>Email : {userdata.email}</p>
+              <p>User Type :{userdata.usertype}</p>
+              <p>First Name : {userdata.firstname}</p>
+              <p>Last Name : {userdata.lastname}</p>
+              <p>Email ID : {userdata.email}</p>
+              <p>Address : {userdata.address}</p>
+              <p>City Name :{userdata.city}</p>
+              <p>Phone No :{userdata.phoneno}</p>
+              <p>College Name : {userdata.college}</p>
+              <p>Stream : {userdata.stream}</p>
+              <p>Skils : {userdata.skill}</p>
+            </div>
+            <div className="box2">
+              Resume
+              <div className="download" onClick={handeldownload}>
+                Download Resume
+              </div>
+            </div>
           </>
         ) : (
           <p>Loading...</p>

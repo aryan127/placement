@@ -1,10 +1,8 @@
 .App {
   display: flex;
   width: 99vw;
-  height: 98vh;
   margin: auto;
   justify-content: center;
   align-items: center;
-  background: #e4ebf4;
   font-family: Arial, sans-serif;
 }

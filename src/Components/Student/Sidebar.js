@@ -1,14 +1,24 @@
 import axios from "axios";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import "../Css/Sidebar.css";
+import imgpath from "../../download.jpg";
+import { useCookies } from "react-cookie";
 
 const Sidebar = () => {
   const history = useHistory();
-  const email = localStorage.getItem("email");
+  const [cookies, _] = useCookies(["access_token"]);
 
+  const email = localStorage.getItem("email");
+  const handleLogout = () => {
+    localStorage.clear();
+    history.push("/login");
+  };
   const checkplacecomm = () => {
     axios
-      .get(`http://localhost:9002/memornot/get-details/${email}`)
+      .get(`/memornot/get-details/${email}`, {
+        headers: { authorization: cookies.access_token },
+      })
       .then((res) => {
         console.log(res.data.message);
         if (res.data.message === "True") {
@@ -22,6 +32,11 @@ const Sidebar = () => {
     <div>
       <div className="sidebar-content open">
         <ul className="sidebar-menu">
+          <li>
+            <div>
+              <img src={imgpath} alt="" className="image"></img>
+            </div>
+          </li>
           <li>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +98,7 @@ const Sidebar = () => {
             </div>
           </li>
           <li>
-            <div onClick={() => history.push("/login")}>
+            <div onClick={handleLogout}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
